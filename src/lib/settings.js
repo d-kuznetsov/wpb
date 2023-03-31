@@ -1,4 +1,5 @@
 export default {
+  tick: 40,
   sets: [
     {
       reps: 3,
@@ -16,4 +17,4 @@ export default {
       rest: 1,
     },
   ],
-}
+};
