@@ -1,15 +1,31 @@
 <script>
-//import { ref } from 'vue';
+import { ref } from 'vue';
 import { Col, Row, Button } from 'vant';
+import { computed } from '@vue/reactivity';
 
 export default {
+  props: {
+    state: {
+      type: String,
+    },
+  },
   emits: ['stop', 'start', 'pause'],
   components: {
     Row,
     Column: Col,
     Btn: Button,
   },
-  setup(_, { emit }) {
+  setup(props, { emit }) {
+    const stopBtnDisabled = computed(() => {
+      return props.state === 'init';
+    });
+    const startBtnDisabled = computed(() => {
+      return props.state === 'run';
+    });
+    const pauseBtnDisabled = computed(() => {
+      return props.state !== 'run';
+    });
+
     const onStopClick = () => {
       emit('stop');
     };
@@ -20,6 +36,9 @@ export default {
       emit('pause');
     };
     return {
+      stopBtnDisabled,
+      startBtnDisabled,
+      pauseBtnDisabled,
       onStopClick,
       onStartClick,
       onPauseClick,
@@ -32,13 +51,34 @@ export default {
   <div class="ControlPanel">
     <Row gutter="8">
       <Column span="8">
-        <Btn icon="stop-circle-o" size="large">Stop</Btn>
+        <Btn
+          icon="stop-circle-o"
+          type="primary"
+          size="large"
+          :disabled="stopBtnDisabled"
+          @click="onStopClick"
+          >Stop</Btn
+        >
       </Column>
       <Column span="8">
-        <Btn icon="play-circle-o" type="primary" size="large">Start</Btn>
+        <Btn
+          icon="play-circle-o"
+          type="primary"
+          size="large"
+          :disabled="startBtnDisabled"
+          @click="onStartClick"
+          >Start</Btn
+        >
       </Column>
       <Column span="8">
-        <Btn icon="pause-circle-o" type="primary" size="large" @click="onPauseClick">Pause</Btn>
+        <Btn
+          icon="pause-circle-o"
+          type="primary"
+          size="large"
+          :disabled="pauseBtnDisabled"
+          @click="onPauseClick"
+          >Pause</Btn
+        >
       </Column>
     </Row>
   </div>

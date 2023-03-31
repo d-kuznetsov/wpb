@@ -1,5 +1,5 @@
 <script>
-import { ref, watch } from 'vue';
+import { ref, computed, reactive, watch } from 'vue';
 import settings from './lib/settings';
 import { ExserciseIterator } from './lib';
 import Circle from './components/progress/Circle.vue';
@@ -16,24 +16,33 @@ export default {
       tick.value++;
     };
 
-    let lock = true;
-    const toggleLock = () => {
-      lock = !lock;
+    const ei = reactive(new ExserciseIterator(settings.sets));
+    const currentRate = ref(0);
+
+    const currentState = ref('init');
+    const onStop = () => {
+      currentState.value = 'init';
+      ei.reset();
+      currentRate.value = 0;
     };
+    const onStart = () => {
+      currentState.value = 'run';
+    };
+    const onPause = () => {
+      currentState.value = 'pause';
+    };
+    let lock = computed(() => {
+      return currentState.value !== 'run';
+    });
+
     setInterval(() => {
-      if (!lock) {
+      if (!lock.value) {
         incrementTick();
       }
     }, settings.tick);
 
-    const onPause = () => {
-      toggleLock();
-    };
-
-    const ei = new ExserciseIterator(settings.sets);
-
     const rate = 100;
-    const currentRate = ref(0);
+
     const getRateStep = (sec) => {
       return (rate * settings.tick) / sec;
     };
@@ -44,7 +53,8 @@ export default {
       if (currentRate.value > rate) {
         const it = ei.next();
         if (it.done) {
-          toggleLock();
+          //toggleLock();
+          currentState.value = 'init';
           return;
         }
         rateStep = getRateStep(it.value);
@@ -53,10 +63,13 @@ export default {
     });
 
     return {
-      toggleLock,
+      onStop,
+      onStart,
       onPause,
       rate,
       currentRate,
+      currentState,
+      ei,
     };
   },
 };
@@ -65,9 +78,13 @@ export default {
 <template>
   <div class="App">
     <Circle :rate="rate" :current-rate="currentRate" />
-    {{ currentRate }}
-    <ControlPanel @pause="onPause" />
-    {{ tick }}
+    <div>
+      <span> {{ currentRate }}</span>
+      <span>curSet {{ ei.curSet }}</span>
+      <span>curRep {{ ei.curRep }}</span>
+      <span>rest {{ ei.rest }}</span>
+    </div>
+    <ControlPanel :state="currentState" @stop="onStop" @start="onStart" @pause="onPause" />
   </div>
 </template>
 <style lang="postcss">

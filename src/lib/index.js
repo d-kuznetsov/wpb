@@ -29,4 +29,9 @@ export class ExserciseIterator {
       done: true,
     };
   }
+  reset() {
+    this.curSet = 0;
+    this.curRep = 0;
+    this.rest = false;
+  }
 }
