@@ -2,6 +2,16 @@
 import { Circle } from 'vant';
 
 export default {
+  props: {
+    rate: {
+      type: Number,
+      default: 100,
+    },
+    currentRate: {
+      type: Number,
+      default: 0,
+    },
+  },
   components: {
     Circle,
   },
@@ -14,8 +24,8 @@ export default {
     <Circle
       fill="#ebedf0"
       size="220px"
-      current-rate="30"
-      rate="30"
+      :current-rate="currentRate"
+      :rate="rate"
       :stroke-width="60"
       text="Custom Width"
     />

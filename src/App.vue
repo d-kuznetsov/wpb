@@ -1,6 +1,7 @@
 <script>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import settings from './lib/settings';
+import { ExserciseIterator } from './lib';
 import Circle from './components/progress/Circle.vue';
 import ControlPanel from './components/ControlPanel.vue';
 
@@ -29,10 +30,33 @@ export default {
       toggleLock();
     };
 
+    const ei = new ExserciseIterator(settings.sets);
+
+    const rate = 100;
+    const currentRate = ref(0);
+    const getRateStep = (sec) => {
+      return (rate * settings.tick) / sec;
+    };
+    let rateStep = getRateStep(ei.next().value);
+
+    watch(tick, () => {
+      currentRate.value += rateStep;
+      if (currentRate.value > rate) {
+        const it = ei.next();
+        if (it.done) {
+          toggleLock();
+          return;
+        }
+        rateStep = getRateStep(it.value);
+        currentRate.value = 0;
+      }
+    });
+
     return {
       toggleLock,
       onPause,
-      tick,
+      rate,
+      currentRate,
     };
   },
 };
@@ -40,7 +64,8 @@ export default {
 
 <template>
   <div class="App">
-    <Circle />
+    <Circle :rate="rate" :current-rate="currentRate" />
+    {{ currentRate }}
     <ControlPanel @pause="onPause" />
     {{ tick }}
   </div>
