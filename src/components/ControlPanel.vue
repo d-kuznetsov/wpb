@@ -3,12 +3,28 @@
 import { Col, Row, Button } from 'vant';
 
 export default {
+  emits: ['stop', 'start', 'pause'],
   components: {
     Row,
     Column: Col,
     Btn: Button,
   },
-  setup() {},
+  setup(_, { emit }) {
+    const onStopClick = () => {
+      emit('stop');
+    };
+    const onStartClick = () => {
+      emit('start');
+    };
+    const onPauseClick = () => {
+      emit('pause');
+    };
+    return {
+      onStopClick,
+      onStartClick,
+      onPauseClick,
+    };
+  },
 };
 </script>
 
@@ -22,7 +38,7 @@ export default {
         <Btn icon="play-circle-o" type="primary" size="large">Start</Btn>
       </Column>
       <Column span="8">
-        <Btn icon="pause-circle-o" type="primary" size="large">Pause</Btn>
+        <Btn icon="pause-circle-o" type="primary" size="large" @click="onPauseClick">Pause</Btn>
       </Column>
     </Row>
   </div>

@@ -1,10 +1,12 @@
 <script>
 import { ref } from 'vue';
 import settings from './lib/settings';
+import Circle from './components/progress/Circle.vue';
 import ControlPanel from './components/ControlPanel.vue';
 
 export default {
   components: {
+    Circle,
     ControlPanel,
   },
   setup() {
@@ -23,8 +25,14 @@ export default {
       }
     }, settings.tick);
 
+    const onPause = () => {
+      toggleLock();
+    };
+
     return {
       toggleLock,
+      onPause,
+      tick,
     };
   },
 };
@@ -32,13 +40,16 @@ export default {
 
 <template>
   <div class="App">
-    <ControlPanel />
+    <Circle />
+    <ControlPanel @pause="onPause" />
+    {{ tick }}
   </div>
 </template>
 <style lang="postcss">
 .App {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   height: 100vh;
   width: 100%;
   max-width: 640px;
