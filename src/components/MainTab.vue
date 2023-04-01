@@ -35,23 +35,25 @@ export default {
     const currentRate = ref(0);
 
     watch(tick, () => {
-      if (currentRep.value < props.sets[currentSet.value].reps) {
-        currentRate.value += step.value;
-        if (currentRate.value >= 100) {
-          currentRate.value = 0;
-          if (isWorking.value) {
-            isWorking.value = false;
+      currentRate.value += step.value;
+      if (currentRate.value >= 100) {
+        if (isWorking.value) {
+          isWorking.value = false;
+        } else {
+          isWorking.value = true;
+          if (currentRep.value + 1 === props.sets[currentSet.value].reps) {
+            if (currentSet.value + 1 === props.sets.length) {
+              state.value = 'final';
+            } else {
+              currentRep.value = 0;
+              currentSet.value++;
+            }
           } else {
-            isWorking.value = true;
             currentRep.value++;
           }
         }
-      } else {
-        if (currentSet.value + 1 === props.sets.length) {
-          state.value = 'final';
-        } else {
-          currentRep.value = 0;
-          currentSet.value++;
+        if (state.value !== 'final') {
+          currentRate.value = 0;
         }
       }
     });
