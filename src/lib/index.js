@@ -1,23 +1,23 @@
 export class ExserciseIterator {
-  constructor(sets) {
-    this.sets = sets;
+  constructor(exercises) {
+    this.exercises = exercises;
     this.curSet = 0;
-    this.curRep = 0;
-    this.rest = false;
+    this.curSet = 0;
+    this.off = false;
   }
   next() {
-    if (this.curSet < this.sets.length) {
+    if (this.curSet < this.exercises.length) {
       let value;
-      if (this.rest) {
-        value = this.sets[this.curSet].rest;
-        this.rest = false;
-        this.curRep++;
+      if (this.off) {
+        value = this.exercises[this.curSet].off;
+        this.off = false;
+        this.curSet++;
       } else {
-        value = this.sets[this.curSet].work;
-        this.rest = true;
+        value = this.exercises[this.curSet].on;
+        this.off = true;
       }
-      if (this.curRep === this.sets[this.curSet].reps) {
-        this.curRep = 0;
+      if (this.curSet === this.exercises[this.curSet].sets) {
+        this.curSet = 0;
         this.curSet++;
       }
       return {
@@ -31,7 +31,7 @@ export class ExserciseIterator {
   }
   reset() {
     this.curSet = 0;
-    this.curRep = 0;
-    this.rest = false;
+    this.curSet = 0;
+    this.off = false;
   }
 }

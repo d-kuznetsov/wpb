@@ -1,20 +1,20 @@
 export default {
   tick: 40,
-  sets: [
+  exercises: [
     {
-      reps: 3,
-      work: 3,
-      rest: 1,
+      sets: 3,
+      on: 3,
+      off: 1,
     },
     {
-      reps: 3,
-      work: 6,
-      rest: 2,
+      sets: 3,
+      on: 6,
+      off: 2,
     },
     {
-      reps: 3,
-      work: 2,
-      rest: 1,
+      sets: 3,
+      on: 2,
+      off: 1,
     },
   ],
 };

@@ -14,8 +14,8 @@ export default {
     ControlPanel,
   },
   props: {
-    sets: {
-      default: settings.sets,
+    exercises: {
+      default: settings.exercises,
     },
   },
   setup(props) {
@@ -28,20 +28,20 @@ export default {
       }
     }, PERIOD);
 
+    const currentExercise = ref(0);
     const currentSet = ref(0);
-    const currentRep = ref(0);
     const isWorking = ref(true);
     const step = computed(() => {
-      const key = isWorking.value ? 'work' : 'rest';
-      const duration = props.sets[currentSet.value][key];
+      const key = isWorking.value ? 'on' : 'off';
+      const duration = props.exercises[currentExercise.value][key];
       return (100 * PERIOD) / (duration * 1000);
     });
     const currentRate = ref(0);
 
     const onRestart = () => {
       state.value = 'initial';
+      currentExercise.value = 0;
       currentSet.value = 0;
-      currentRep.value = 0;
       isWorking.value = true;
       currentRate.value = 0;
     };
@@ -59,11 +59,11 @@ export default {
       if (state.value === 'final') {
         return 'Mission completed';
       }
-      const completedSets = `Completed sets ${currentSet.value}/${props.sets.length}.`;
-      const completedReps = `Completed reps ${currentRep.value}/${
-        props.sets[currentSet.value].reps
+      const completedExercises = `Completed exercises ${currentExercise.value}/${props.exercises.length}.`;
+      const completedSets = `Completed sets ${currentSet.value}/${
+        props.exercises[currentExercise.value].sets
       }.`;
-      return isWorking.value ? `${completedSets} ${completedReps}` : 'Break';
+      return isWorking.value ? `${completedExercises} ${completedSets}` : 'Break';
     });
 
     watch(tick, () => {
@@ -73,15 +73,15 @@ export default {
           isWorking.value = false;
         } else {
           isWorking.value = true;
-          if (currentRep.value + 1 === props.sets[currentSet.value].reps) {
-            if (currentSet.value + 1 === props.sets.length) {
+          if (currentSet.value + 1 === props.exercises[currentExercise.value].sets) {
+            if (currentExercise.value + 1 === props.exercises.length) {
               state.value = 'final';
             } else {
-              currentRep.value = 0;
-              currentSet.value++;
+              currentSet.value = 0;
+              currentExercise.value++;
             }
           } else {
-            currentRep.value++;
+            currentSet.value++;
           }
         }
         if (state.value !== 'final') {
@@ -92,8 +92,8 @@ export default {
 
     return {
       state,
+      currentExercise,
       currentSet,
-      currentRep,
       isWorking,
       currentRate,
       progBarColor,
