@@ -32,33 +32,33 @@ export default {
 <template>
   <div class="control-panel">
     <Button
+      :disabled="isRestartDisabled"
       icon="replay"
       type="primary"
       size="large"
       round
-      :disabled="isRestartDisabled"
       @click="onRestartClick"
     >
       Restart
     </Button>
 
     <Button
+      :disabled="isStartDisabled"
       icon="play-circle-o"
       type="primary"
       size="large"
       round
-      :disabled="isStartDisabled"
       @click="onStartClick"
     >
       Start
     </Button>
 
     <Button
+      :disabled="isPauseDisabled"
       icon="pause-circle-o"
       type="primary"
       size="large"
       round
-      :disabled="isPauseDisabled"
       @click="onPauseClick"
     >
       Pause
