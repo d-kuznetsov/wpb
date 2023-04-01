@@ -14,7 +14,7 @@ export default {
 
 <template>
   <ConfigProvider theme="dark">
-    <div class="App">
+    <div class="app">
       <Tabs>
         <template v-slot:main>
           <MainTab />
@@ -25,7 +25,7 @@ export default {
 </template>
 
 <style lang="postcss">
-.App {
+.app {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -33,6 +33,5 @@ export default {
   width: 100%;
   max-width: 640px;
   margin: 0 auto;
-  outline-style: dotted;
 }
 </style>

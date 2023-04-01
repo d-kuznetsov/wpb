@@ -43,9 +43,10 @@ export default {
 
 <style lang="postcss">
 .progress-bar {
-  --van-circle-text-font-size: 24px;
   display: flex;
   justify-content: center;
   align-items: center;
+
+  --van-circle-text-font-size: 24px;
 }
 </style>

@@ -15,18 +15,20 @@ export default {
 </script>
 
 <template>
-  <Tabs v-model:active="active" class="Tabs">
+  <Tabs v-model:active="active" class="tabs">
     <Tab title="Main">
       <slot name="main">Main tab</slot>
     </Tab>
     <Tab title="Settings">
-      <slot name="settings">Settings tab</slot>
+      <slot name="settings">
+        <div class="empty-tab-content">Coming soon</div>
+      </slot>
     </Tab>
   </Tabs>
 </template>
 
 <style lang="postcss">
-.Tabs {
+.tabs {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -39,9 +41,16 @@ export default {
   .van-tab__panel {
     height: 100%;
   }
+
+  .empty-tab-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
 }
 
-.van-theme-dark .Tabs {
+.van-theme-dark .tabs {
   --van-tabs-nav-background: var(--bg-color-dark);
 }
 </style>
