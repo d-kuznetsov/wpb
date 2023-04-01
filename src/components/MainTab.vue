@@ -22,11 +22,11 @@ export default {
     const state = ref('initial');
     const isTickLocked = computed(() => state.value !== 'run');
     const tick = ref(false);
-    setInterval(() => {
+    const updateTick = () => {
       if (!isTickLocked.value) {
         tick.value = !tick.value;
       }
-    }, PERIOD);
+    };
 
     const currentExercise = ref(0);
     const currentSet = ref(0);
@@ -87,6 +87,15 @@ export default {
         if (state.value !== 'final') {
           currentRate.value = 0;
         }
+      }
+    });
+
+    let intervalId;
+    watch(state, (value) => {
+      if (value === 'run') {
+        intervalId = setInterval(updateTick, PERIOD);
+      } else {
+        clearInterval(intervalId);
       }
     });
 
