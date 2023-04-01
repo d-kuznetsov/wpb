@@ -10,7 +10,7 @@ export default {
   },
   setup(props, { emit }) {
     const isRestartDisabled = computed(() => props.state === 'initial');
-    const isStartDisabled = computed(() => props.state === 'run');
+    const isStartDisabled = computed(() => props.state === 'run' || props.state === 'final');
     const isPauseDisabled = computed(() => props.state !== 'run');
 
     const onRestartClick = () => emit('restart');
