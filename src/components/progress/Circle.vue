@@ -1,39 +1,46 @@
 <script>
+import { computed } from 'vue';
 import { Circle } from 'vant';
+import { useWindowSize } from '@vant/use';
+
+const MAX_CONTAINER_SIZE = 640;
+const GAP = 120;
 
 export default {
-  props: {
-    rate: {
-      type: Number,
-      default: 100,
-    },
-    currentRate: {
-      type: Number,
-      default: 0,
-    },
-  },
+  props: ['current-rate'],
   components: {
     Circle,
   },
-  setup() {},
+  setup(props) {
+    const { width, height } = useWindowSize();
+    const diameter = computed(() => {
+      const screenMinSide = Math.min(width.value, height.value);
+      return Math.min(screenMinSide, MAX_CONTAINER_SIZE) - GAP;
+    });
+    const text = computed(() => props.currentRate.toFixed(0) + '%');
+    return {
+      text,
+      diameter,
+    };
+  },
 };
 </script>
 
 <template>
-  <div class="Circle">
+  <div class="progress-bar">
     <Circle
       fill="#ebedf0"
-      size="220px"
+      :size="diameter"
       :current-rate="currentRate"
-      :rate="rate"
+      :rate="100"
       :stroke-width="60"
-      text="Custom Width"
+      :text="text"
     />
   </div>
 </template>
 
 <style lang="postcss">
-.Circle {
+.progress-bar {
   display: flex;
   justify-content: center;
   align-items: center;
