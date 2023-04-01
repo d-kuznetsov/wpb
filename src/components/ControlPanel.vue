@@ -4,24 +4,24 @@ import { Button } from 'vant';
 
 export default {
   props: ['state'],
-  emits: ['stop', 'start', 'pause'],
+  emits: ['restart', 'start', 'pause'],
   components: {
     Button,
   },
   setup(props, { emit }) {
-    const isStopDisabled = computed(() => props.state === 'init');
+    const isRestartDisabled = computed(() => props.state === 'init');
     const isStartDisabled = computed(() => props.state === 'run');
     const isPauseDisabled = computed(() => props.state !== 'run');
 
-    const onStopClick = () => emit('stop');
+    const onRestartClick = () => emit('restart');
     const onStartClick = () => emit('start');
     const onPauseClick = () => emit('pause');
 
     return {
-      isStopDisabled,
+      isRestartDisabled,
       isStartDisabled,
       isPauseDisabled,
-      onStopClick,
+      onRestartClick,
       onStartClick,
       onPauseClick,
     };
@@ -32,14 +32,14 @@ export default {
 <template>
   <div class="control-panel">
     <Button
-      icon="stop-circle-o"
+      icon="replay"
       type="primary"
       size="large"
       round
-      :disabled="isStopDisabled"
-      @click="onStopClick"
+      :disabled="isRestartDisabled"
+      @click="onRestartClick"
     >
-      Stop
+      Restart
     </Button>
 
     <Button

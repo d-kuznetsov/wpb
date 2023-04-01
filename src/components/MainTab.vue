@@ -36,7 +36,7 @@ export default {
     });
     const currentRate = ref(0);
 
-    const onStop = () => {
+    const onRestart = () => {
       state.value = 'init';
       currentSet.value = 0;
       currentRep.value = 0;
@@ -80,7 +80,7 @@ export default {
       currentRep,
       isWorking,
       currentRate,
-      onStop,
+      onRestart,
       onStart,
       onPause,
     };
@@ -91,7 +91,7 @@ export default {
 <template>
   <div class="MainTab">
     <Circle :rate="100" :current-rate="currentRate" class="MainTab__progress-bar" />
-    <ControlPanel :state="state" @stop="onStop" @start="onStart" @pause="onPause" />
+    <ControlPanel :state="state" @restart="onRestart" @start="onStart" @pause="onPause" />
   </div>
 </template>
 
