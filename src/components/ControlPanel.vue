@@ -9,7 +9,7 @@ export default {
     Button,
   },
   setup(props, { emit }) {
-    const isRestartDisabled = computed(() => props.state === 'init');
+    const isRestartDisabled = computed(() => props.state === 'initial');
     const isStartDisabled = computed(() => props.state === 'run');
     const isPauseDisabled = computed(() => props.state !== 'run');
 

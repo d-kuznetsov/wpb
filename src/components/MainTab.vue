@@ -1,5 +1,6 @@
 <script>
 import { ref, computed, watch } from 'vue';
+import { NoticeBar } from 'vant';
 import ProgressBar from './ProgressBar.vue';
 import ControlPanel from './ControlPanel.vue';
 import settings from '../lib/settings';
@@ -8,6 +9,7 @@ const PERIOD = 40;
 
 export default {
   components: {
+    NoticeBar,
     ProgressBar,
     ControlPanel,
   },
@@ -17,7 +19,7 @@ export default {
     },
   },
   setup(props) {
-    const state = ref('init');
+    const state = ref('initial');
     const isTickLocked = computed(() => state.value !== 'run');
     const tick = ref(false);
     setInterval(() => {
@@ -37,7 +39,7 @@ export default {
     const currentRate = ref(0);
 
     const onRestart = () => {
-      state.value = 'init';
+      state.value = 'initial';
       currentSet.value = 0;
       currentRep.value = 0;
       isWorking.value = true;
@@ -52,6 +54,17 @@ export default {
 
     const progBarColor = computed(() => (isWorking.value ? '#67e8f9' : '#6ee7b7'));
     const progBarLayerColor = computed(() => (isWorking.value ? '#cffafe' : '#d1fae5'));
+
+    const notice = computed(() => {
+      if (state.value === 'final') {
+        return 'Mission completed';
+      }
+      const completedSets = `Completed sets ${currentSet.value}/${props.sets.length}.`;
+      const completedReps = `Completed reps ${currentRep.value}/${
+        props.sets[currentSet.value].reps
+      }.`;
+      return isWorking.value ? `${completedSets} ${completedReps}` : 'Break';
+    });
 
     watch(tick, () => {
       currentRate.value += step.value;
@@ -85,6 +98,7 @@ export default {
       currentRate,
       progBarColor,
       progBarLayerColor,
+      notice,
       onRestart,
       onStart,
       onPause,
@@ -95,6 +109,9 @@ export default {
 
 <template>
   <div class="main-tab">
+    <div class="main-tab__notice-wrap">
+      <NoticeBar :text="notice" left-icon="info-o" color="#06b6d4" background="#cffafe" />
+    </div>
     <ProgressBar
       :current-rate="currentRate"
       :color="progBarColor"
@@ -111,6 +128,10 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+
+  &__notice-wrap {
+    padding-top: 12px;
+  }
 
   &__progress-bar {
     flex: 1;
