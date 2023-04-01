@@ -74,4 +74,8 @@ export default {
   padding: 12px;
   border-top: 1px solid #6b7280;
 }
+
+.van-theme-dark .control-panel {
+  background-color: var(--bg-color-dark);
+}
 </style>

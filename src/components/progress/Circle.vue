@@ -18,9 +18,14 @@ export default {
       return Math.min(screenMinSide, MAX_CONTAINER_SIZE) - GAP;
     });
     const text = computed(() => props.currentRate.toFixed(0) + '%');
+    const gradientColor = {
+      '0%': '#cffafe',
+      '100%': '#22d3ee',
+    };
     return {
       text,
       diameter,
+      gradientColor,
     };
   },
 };
@@ -29,11 +34,12 @@ export default {
 <template>
   <div class="progress-bar">
     <Circle
-      fill="#ebedf0"
       :size="diameter"
       :current-rate="currentRate"
-      :rate="100"
-      :stroke-width="60"
+      rate="100"
+      stroke-width="100"
+      color="#67e8f9"
+      layer-color="#cffafe"
       :text="text"
     />
   </div>
@@ -41,6 +47,7 @@ export default {
 
 <style lang="postcss">
 .progress-bar {
+  --van-circle-text-font-size: 24px;
   display: flex;
   justify-content: center;
   align-items: center;

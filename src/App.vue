@@ -1,9 +1,11 @@
 <script>
+import { ConfigProvider } from 'vant';
 import MainTab from './components/MainTab.vue';
 import Tabs from './components/Tabs.vue';
 
 export default {
   components: {
+    ConfigProvider,
     MainTab,
     Tabs,
   },
@@ -11,13 +13,15 @@ export default {
 </script>
 
 <template>
-  <div class="App">
-    <Tabs>
-      <template v-slot:main>
-        <MainTab />
-      </template>
-    </Tabs>
-  </div>
+  <ConfigProvider theme="dark">
+    <div class="App">
+      <Tabs>
+        <template v-slot:main>
+          <MainTab />
+        </template>
+      </Tabs>
+    </div>
+  </ConfigProvider>
 </template>
 
 <style lang="postcss">

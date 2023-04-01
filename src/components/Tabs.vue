@@ -40,4 +40,8 @@ export default {
     height: 100%;
   }
 }
+
+.van-theme-dark .Tabs {
+  --van-tabs-nav-background: var(--bg-color-dark);
+}
 </style>
