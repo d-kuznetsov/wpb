@@ -4,11 +4,13 @@ import settings from './lib/settings';
 import { ExserciseIterator } from './lib';
 import Circle from './components/progress/Circle.vue';
 import ControlPanel from './components/ControlPanel.vue';
+import MainTab from './components/MainTab.vue';
 
 export default {
   components: {
     Circle,
     ControlPanel,
+    MainTab,
   },
   setup() {
     const tick = ref(0);
@@ -85,6 +87,7 @@ export default {
       <span>rest {{ ei.rest }}</span>
     </div>
     <ControlPanel :state="currentState" @stop="onStop" @start="onStart" @pause="onPause" />
+    <MainTab />
   </div>
 </template>
 <style lang="postcss">
