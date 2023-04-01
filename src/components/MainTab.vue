@@ -1,6 +1,7 @@
 <script>
 import { ref, computed, watch } from 'vue';
 import Circle from './progress/Circle.vue';
+import ControlPanel from './ControlPanel.vue';
 import settings from '../lib/settings';
 
 const PERIOD = 40;
@@ -8,6 +9,7 @@ const PERIOD = 40;
 export default {
   components: {
     Circle,
+    ControlPanel,
   },
   props: {
     sets: {
@@ -15,7 +17,7 @@ export default {
     },
   },
   setup(props) {
-    const state = ref('run');
+    const state = ref('init');
     const isTickLocked = computed(() => state.value !== 'run');
     const tick = ref(false);
     setInterval(() => {
@@ -33,6 +35,20 @@ export default {
       return (100 * PERIOD) / (duration * 1000);
     });
     const currentRate = ref(0);
+
+    const onStop = () => {
+      state.value = 'init';
+      currentSet.value = 0;
+      currentRep.value = 0;
+      isWorking.value = true;
+      currentRate.value = 0;
+    };
+    const onStart = () => {
+      state.value = 'run';
+    };
+    const onPause = () => {
+      state.value = 'pause';
+    };
 
     watch(tick, () => {
       currentRate.value += step.value;
@@ -59,19 +75,35 @@ export default {
     });
 
     return {
+      state,
       currentSet,
       currentRep,
       isWorking,
       currentRate,
+      onStop,
+      onStart,
+      onPause,
     };
   },
 };
 </script>
 
 <template>
-  <Circle :rate="100" :current-rate="currentRate" />
-  <div>currentSet {{ currentSet }}</div>
-  <div>currentRep {{ currentRep }}</div>
-  <div>isWorking {{ isWorking }}</div>
-  <div>currentRate {{ currentRate }}</div>
+  <div class="MainTab">
+    <Circle :rate="100" :current-rate="currentRate" class="MainTab__progress-bar" />
+    <ControlPanel :state="state" @stop="onStop" @start="onStart" @pause="onPause" />
+  </div>
 </template>
+
+<style lang="postcss">
+.MainTab {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+  &__progress-bar {
+    flex: 1;
+  }
+}
+</style>
