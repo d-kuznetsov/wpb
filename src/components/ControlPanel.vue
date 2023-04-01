@@ -1,44 +1,28 @@
 <script>
-import { ref } from 'vue';
+import { computed } from 'vue';
 import { Col, Row, Button } from 'vant';
-import { computed } from '@vue/reactivity';
 
 export default {
-  props: {
-    state: {
-      type: String,
-    },
-  },
+  props: ['state'],
   emits: ['stop', 'start', 'pause'],
   components: {
     Row,
     Column: Col,
-    Btn: Button,
+    Button,
   },
   setup(props, { emit }) {
-    const stopBtnDisabled = computed(() => {
-      return props.state === 'init';
-    });
-    const startBtnDisabled = computed(() => {
-      return props.state === 'run';
-    });
-    const pauseBtnDisabled = computed(() => {
-      return props.state !== 'run';
-    });
+    const isStopDisabled = computed(() => props.state === 'init');
+    const isStartDisabled = computed(() => props.state === 'run');
+    const isPauseDisabled = computed(() => props.state !== 'run');
 
-    const onStopClick = () => {
-      emit('stop');
-    };
-    const onStartClick = () => {
-      emit('start');
-    };
-    const onPauseClick = () => {
-      emit('pause');
-    };
+    const onStopClick = () => emit('stop');
+    const onStartClick = () => emit('start');
+    const onPauseClick = () => emit('pause');
+
     return {
-      stopBtnDisabled,
-      startBtnDisabled,
-      pauseBtnDisabled,
+      isStopDisabled,
+      isStartDisabled,
+      isPauseDisabled,
       onStopClick,
       onStartClick,
       onPauseClick,
@@ -48,47 +32,50 @@ export default {
 </script>
 
 <template>
-  <div class="ControlPanel">
+  <div class="control-panel">
     <Row gutter="12">
       <Column span="8">
-        <Btn
+        <Button
           icon="stop-circle-o"
           type="primary"
           size="large"
           round
-          :disabled="stopBtnDisabled"
+          :disabled="isStopDisabled"
           @click="onStopClick"
-          >Stop</Btn
         >
+          Stop
+        </Button>
       </Column>
       <Column span="8">
-        <Btn
+        <Button
           icon="play-circle-o"
           type="primary"
           size="large"
           round
-          :disabled="startBtnDisabled"
+          :disabled="isStartDisabled"
           @click="onStartClick"
-          >Start</Btn
         >
+          Start
+        </Button>
       </Column>
       <Column span="8">
-        <Btn
+        <Button
           icon="pause-circle-o"
           type="primary"
           size="large"
           round
-          :disabled="pauseBtnDisabled"
+          :disabled="isPauseDisabled"
           @click="onPauseClick"
-          >Pause</Btn
         >
+          Pause
+        </Button>
       </Column>
     </Row>
   </div>
 </template>
 
 <style lang="postcss">
-.ControlPanel {
+.control-panel {
   padding: 12px;
   border-top: 1px solid grey;
 }
