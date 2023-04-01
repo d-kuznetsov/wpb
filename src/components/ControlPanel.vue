@@ -49,12 +49,13 @@ export default {
 
 <template>
   <div class="ControlPanel">
-    <Row gutter="8">
+    <Row gutter="12">
       <Column span="8">
         <Btn
           icon="stop-circle-o"
           type="primary"
           size="large"
+          round
           :disabled="stopBtnDisabled"
           @click="onStopClick"
           >Stop</Btn
@@ -65,6 +66,7 @@ export default {
           icon="play-circle-o"
           type="primary"
           size="large"
+          round
           :disabled="startBtnDisabled"
           @click="onStartClick"
           >Start</Btn
@@ -75,6 +77,7 @@ export default {
           icon="pause-circle-o"
           type="primary"
           size="large"
+          round
           :disabled="pauseBtnDisabled"
           @click="onPauseClick"
           >Pause</Btn
@@ -86,6 +89,7 @@ export default {
 
 <style lang="postcss">
 .ControlPanel {
-  padding: 8px;
+  padding: 12px;
+  border-top: 1px solid grey;
 }
 </style>
