@@ -20,23 +20,28 @@ export default {
   },
   setup(props) {
     const state = ref('initial');
-    const isTickLocked = computed(() => state.value !== 'run');
-    const tick = ref(false);
-    const updateTick = () => {
-      if (!isTickLocked.value) {
-        tick.value = !tick.value;
-      }
-    };
-
     const currentExercise = ref(0);
     const currentSet = ref(0);
     const isWorking = ref(true);
+    const currentRate = ref(0);
     const step = computed(() => {
       const key = isWorking.value ? 'on' : 'off';
       const duration = props.exercises[currentExercise.value][key];
       return (100 * PERIOD) / (duration * 1000);
     });
-    const currentRate = ref(0);
+    const progBarColor = computed(() => (isWorking.value ? '#67e8f9' : '#6ee7b7'));
+    const progBarLayerColor = computed(() => (isWorking.value ? '#cffafe' : '#d1fae5'));
+
+    const notice = computed(() => {
+      if (state.value === 'final') {
+        return 'Mission completed';
+      }
+      const completedExercises = `Completed exercises ${currentExercise.value}/${props.exercises.length}.`;
+      const completedSets = `Completed sets ${currentSet.value}/${
+        props.exercises[currentExercise.value].sets
+      }.`;
+      return isWorking.value ? `${completedExercises} ${completedSets}` : 'Break';
+    });
 
     const onRestart = () => {
       state.value = 'initial';
@@ -52,21 +57,7 @@ export default {
       state.value = 'pause';
     };
 
-    const progBarColor = computed(() => (isWorking.value ? '#67e8f9' : '#6ee7b7'));
-    const progBarLayerColor = computed(() => (isWorking.value ? '#cffafe' : '#d1fae5'));
-
-    const notice = computed(() => {
-      if (state.value === 'final') {
-        return 'Mission completed';
-      }
-      const completedExercises = `Completed exercises ${currentExercise.value}/${props.exercises.length}.`;
-      const completedSets = `Completed sets ${currentSet.value}/${
-        props.exercises[currentExercise.value].sets
-      }.`;
-      return isWorking.value ? `${completedExercises} ${completedSets}` : 'Break';
-    });
-
-    watch(tick, () => {
+    const run = () => {
       currentRate.value += step.value;
       if (currentRate.value >= 100) {
         if (isWorking.value) {
@@ -88,12 +79,12 @@ export default {
           currentRate.value = 0;
         }
       }
-    });
+    };
 
     let intervalId;
     watch(state, (value) => {
       if (value === 'run') {
-        intervalId = setInterval(updateTick, PERIOD);
+        intervalId = setInterval(run, PERIOD);
       } else {
         clearInterval(intervalId);
       }
