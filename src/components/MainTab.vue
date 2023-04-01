@@ -3,7 +3,7 @@ import { ref, computed, watch } from 'vue';
 import { NoticeBar } from 'vant';
 import ProgressBar from './ProgressBar.vue';
 import ControlPanel from './ControlPanel.vue';
-import settings from '../lib/settings';
+import settings from '../default-settings';
 
 const PERIOD = 40;
 
@@ -22,7 +22,7 @@ export default {
   },
   props: {
     exercises: {
-      default: settings.exercises,
+      default: settings.workout.exercises,
     },
   },
   setup(props) {
