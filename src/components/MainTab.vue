@@ -7,6 +7,13 @@ import settings from '../lib/settings';
 
 const PERIOD = 40;
 
+const APP_STATE = {
+  INITIAL: 'initial',
+  RUN: 'run',
+  PAUSE: 'pause',
+  FINAL: 'final',
+};
+
 export default {
   components: {
     NoticeBar,
@@ -19,7 +26,7 @@ export default {
     },
   },
   setup(props) {
-    const state = ref('initial');
+    const state = ref(APP_STATE.INITIAL);
     const currentExercise = ref(0);
     const currentSet = ref(0);
     const isWorking = ref(true);
@@ -29,32 +36,33 @@ export default {
       const duration = props.exercises[currentExercise.value][key];
       return (100 * PERIOD) / (duration * 1000);
     });
+
     const progBarColor = computed(() => (isWorking.value ? '#67e8f9' : '#6ee7b7'));
     const progBarLayerColor = computed(() => (isWorking.value ? '#cffafe' : '#d1fae5'));
 
     const notice = computed(() => {
-      if (state.value === 'final') {
-        return 'Mission completed';
+      if (state.value === APP_STATE.INITIAL) {
+        return 'Just do it!';
+      } else if (state.value === APP_STATE.FINAL) {
+        return 'Mission completed!';
       }
-      const completedExercises = `Completed exercises ${currentExercise.value}/${props.exercises.length}.`;
-      const completedSets = `Completed sets ${currentSet.value}/${
-        props.exercises[currentExercise.value].sets
-      }.`;
-      return isWorking.value ? `${completedExercises} ${completedSets}` : 'Break';
+      const exercise = `Exercise: ${currentExercise.value + 1}/${props.exercises.length}.`;
+      const set = `Set ${currentSet.value + 1}/${props.exercises[currentExercise.value].sets}.`;
+      return isWorking.value ? `${exercise} ${set}` : 'Break';
     });
 
     const onRestart = () => {
-      state.value = 'initial';
+      state.value = APP_STATE.INITIAL;
       currentExercise.value = 0;
       currentSet.value = 0;
       isWorking.value = true;
       currentRate.value = 0;
     };
     const onStart = () => {
-      state.value = 'run';
+      state.value = APP_STATE.RUN;
     };
     const onPause = () => {
-      state.value = 'pause';
+      state.value = APP_STATE.PAUSE;
     };
 
     const run = () => {
@@ -66,7 +74,7 @@ export default {
           isWorking.value = true;
           if (currentSet.value + 1 === props.exercises[currentExercise.value].sets) {
             if (currentExercise.value + 1 === props.exercises.length) {
-              state.value = 'final';
+              state.value = APP_STATE.FINAL;
             } else {
               currentSet.value = 0;
               currentExercise.value++;
@@ -75,7 +83,7 @@ export default {
             currentSet.value++;
           }
         }
-        if (state.value !== 'final') {
+        if (state.value !== APP_STATE.FINAL) {
           currentRate.value = 0;
         }
       }
@@ -83,7 +91,7 @@ export default {
 
     let intervalId;
     watch(state, (value) => {
-      if (value === 'run') {
+      if (value === APP_STATE.RUN) {
         intervalId = setInterval(run, PERIOD);
       } else {
         clearInterval(intervalId);
