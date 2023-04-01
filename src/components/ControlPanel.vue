@@ -1,13 +1,11 @@
 <script>
 import { computed } from 'vue';
-import { Col, Row, Button } from 'vant';
+import { Button } from 'vant';
 
 export default {
   props: ['state'],
   emits: ['stop', 'start', 'pause'],
   components: {
-    Row,
-    Column: Col,
     Button,
   },
   setup(props, { emit }) {
@@ -33,50 +31,47 @@ export default {
 
 <template>
   <div class="control-panel">
-    <Row gutter="12">
-      <Column span="8">
-        <Button
-          icon="stop-circle-o"
-          type="primary"
-          size="large"
-          round
-          :disabled="isStopDisabled"
-          @click="onStopClick"
-        >
-          Stop
-        </Button>
-      </Column>
-      <Column span="8">
-        <Button
-          icon="play-circle-o"
-          type="primary"
-          size="large"
-          round
-          :disabled="isStartDisabled"
-          @click="onStartClick"
-        >
-          Start
-        </Button>
-      </Column>
-      <Column span="8">
-        <Button
-          icon="pause-circle-o"
-          type="primary"
-          size="large"
-          round
-          :disabled="isPauseDisabled"
-          @click="onPauseClick"
-        >
-          Pause
-        </Button>
-      </Column>
-    </Row>
+    <Button
+      icon="stop-circle-o"
+      type="primary"
+      size="large"
+      round
+      :disabled="isStopDisabled"
+      @click="onStopClick"
+    >
+      Stop
+    </Button>
+
+    <Button
+      icon="play-circle-o"
+      type="primary"
+      size="large"
+      round
+      :disabled="isStartDisabled"
+      @click="onStartClick"
+    >
+      Start
+    </Button>
+
+    <Button
+      icon="pause-circle-o"
+      type="primary"
+      size="large"
+      round
+      :disabled="isPauseDisabled"
+      @click="onPauseClick"
+    >
+      Pause
+    </Button>
   </div>
 </template>
 
 <style lang="postcss">
 .control-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 12px;
   padding: 12px;
-  border-top: 1px solid grey;
+  border-top: 1px solid #6b7280;
 }
 </style>
