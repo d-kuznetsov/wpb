@@ -1,6 +1,6 @@
 <script>
 import { ref, computed, watch } from 'vue';
-import Circle from './progress/Circle.vue';
+import ProgressBar from './ProgressBar.vue';
 import ControlPanel from './ControlPanel.vue';
 import settings from '../lib/settings';
 
@@ -8,7 +8,7 @@ const PERIOD = 40;
 
 export default {
   components: {
-    Circle,
+    ProgressBar,
     ControlPanel,
   },
   props: {
@@ -50,6 +50,9 @@ export default {
       state.value = 'pause';
     };
 
+    const progBarColor = computed(() => (isWorking.value ? '#67e8f9' : '#6ee7b7'));
+    const progBarLayerColor = computed(() => (isWorking.value ? '#cffafe' : '#d1fae5'));
+
     watch(tick, () => {
       currentRate.value += step.value;
       if (currentRate.value >= 100) {
@@ -80,6 +83,8 @@ export default {
       currentRep,
       isWorking,
       currentRate,
+      progBarColor,
+      progBarLayerColor,
       onRestart,
       onStart,
       onPause,
@@ -89,14 +94,19 @@ export default {
 </script>
 
 <template>
-  <div class="MainTab">
-    <Circle :rate="100" :current-rate="currentRate" class="MainTab__progress-bar" />
+  <div class="main-tab">
+    <ProgressBar
+      :current-rate="currentRate"
+      :color="progBarColor"
+      :color-layer="progBarLayerColor"
+      class="main-tab__progress-bar"
+    />
     <ControlPanel :state="state" @restart="onRestart" @start="onStart" @pause="onPause" />
   </div>
 </template>
 
 <style lang="postcss">
-.MainTab {
+.main-tab {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
