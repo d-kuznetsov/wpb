@@ -1,10 +1,12 @@
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { ConfigProvider } from 'vant';
 import defaultSettings from './default-settings';
 import MainTab from './components/MainTab.vue';
 import SettingTab from './components/SettingTab.vue';
 import Tabs from './components/Tabs.vue';
+
+const STORAGE_KEY = 'APP_SETTINGS';
 
 export default {
   components: {
@@ -14,11 +16,13 @@ export default {
     Tabs,
   },
   setup() {
-    const settingsStr = ref(
-      localStorage.getItem('app-settings') || JSON.stringify(defaultSettings)
-    );
+    const settingsStr = ref(localStorage.getItem(STORAGE_KEY) || JSON.stringify(defaultSettings));
     const settings = computed(() => {
       return JSON.parse(settingsStr.value);
+    });
+
+    watch(settingsStr, (value) => {
+      localStorage.setItem(STORAGE_KEY, value);
     });
 
     return {
