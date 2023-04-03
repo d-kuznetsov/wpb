@@ -16,11 +16,14 @@ export default {
 
 <template>
   <Tabs v-model:active="active" class="tabs">
-    <Tab title="Main">
-      <slot name="main">Main tab</slot>
+    <Tab title="Workout">
+      <slot name="workout">Workout tab</slot>
     </Tab>
     <Tab title="Settings">
-      <slot name="settings">
+      <slot name="settings">Settings tab</slot>
+    </Tab>
+    <Tab title="History">
+      <slot name="history">
         <div class="empty-tab-content">Coming soon</div>
       </slot>
     </Tab>

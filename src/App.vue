@@ -2,7 +2,7 @@
 import { ref, computed, watch } from 'vue';
 import { ConfigProvider } from 'vant';
 import defaultSettings from './default-settings';
-import MainTab from './components/MainTab.vue';
+import WorkoutTab from './components/WorkoutTab.vue';
 import SettingTab from './components/SettingTab.vue';
 import Tabs from './components/Tabs.vue';
 
@@ -11,7 +11,7 @@ const STORAGE_KEY = 'APP_SETTINGS';
 export default {
   components: {
     ConfigProvider,
-    MainTab,
+    WorkoutTab,
     SettingTab,
     Tabs,
   },
@@ -37,8 +37,8 @@ export default {
   <ConfigProvider theme="dark">
     <div class="app">
       <Tabs>
-        <template v-slot:main>
-          <MainTab :exercises="settings.workout.exercises" />
+        <template v-slot:workout>
+          <WorkoutTab :exercises="settings.workout.exercises" />
         </template>
         <template v-slot:settings>
           <SettingTab v-model="settingsStr" />
