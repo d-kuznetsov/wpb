@@ -47,6 +47,6 @@ export default {
   justify-content: center;
   align-items: center;
 
-  --van-circle-text-font-size: 24px;
+  --van-circle-text-font-size: 32px;
 }
 </style>
