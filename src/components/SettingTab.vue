@@ -1,5 +1,6 @@
 <script>
 import { reactive, computed } from 'vue';
+import { useState, APP_STATE } from '../composable/state';
 import { Field, Stepper, Button } from 'vant';
 
 export default {
@@ -11,9 +12,13 @@ export default {
     Button,
   },
   setup(props, { emit }) {
+    const { setState } = useState();
     const copy = reactive(JSON.parse(props.modelValue));
     const isSaveDisabled = computed(() => JSON.stringify(copy) === props.modelValue);
-    const onSave = () => emit('update:modelValue', JSON.stringify(copy));
+    const onSave = () => {
+      setState(APP_STATE.INITIAL);
+      emit('update:modelValue', JSON.stringify(copy));
+    };
 
     return {
       copy,

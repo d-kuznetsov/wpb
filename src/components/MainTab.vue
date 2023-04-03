@@ -15,7 +15,6 @@ export default {
   },
   props: ['exercises'],
   setup(props) {
-    //const state = ref(APP_STATE.INITIAL);
     const { state, setState } = useState();
     const currentExercise = ref(0);
     const currentSet = ref(0);
@@ -41,22 +40,14 @@ export default {
       return isWorking.value ? `${exercise} ${set}` : 'Break';
     });
 
-    const onRestart = () => {
-      //state.value = APP_STATE.INITIAL;
-      setState(APP_STATE.INITIAL);
-      currentExercise.value = 0;
-      currentSet.value = 0;
-      isWorking.value = true;
-      currentRate.value = 0;
-    };
-    const onStart = () => {
-      //state.value = APP_STATE.RUN;
-      setState(APP_STATE.RUN);
-    };
-    const onPause = () => {
-      //state.value = APP_STATE.PAUSE;
-      setState(APP_STATE.PAUSE);
-    };
+    watch(state, (value) => {
+      if (value === APP_STATE.INITIAL) {
+        currentExercise.value = 0;
+        currentSet.value = 0;
+        isWorking.value = true;
+        currentRate.value = 0;
+      }
+    });
 
     const run = () => {
       currentRate.value += step.value;
@@ -67,7 +58,6 @@ export default {
           isWorking.value = true;
           if (currentSet.value + 1 === props.exercises[currentExercise.value].sets) {
             if (currentExercise.value + 1 === props.exercises.length) {
-              //state.value = APP_STATE.FINAL;
               setState(APP_STATE.FINAL);
             } else {
               currentSet.value = 0;
@@ -101,9 +91,6 @@ export default {
       progBarColor,
       progBarLayerColor,
       notice,
-      onRestart,
-      onStart,
-      onPause,
     };
   },
 };
@@ -120,7 +107,7 @@ export default {
       :color-layer="progBarLayerColor"
       class="main-tab__progress-bar"
     />
-    <ControlPanel :state="state" @restart="onRestart" @start="onStart" @pause="onPause" />
+    <ControlPanel />
   </div>
 </template>
 
