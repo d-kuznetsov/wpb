@@ -1,17 +1,11 @@
 <script>
 import { ref, computed, watch } from 'vue';
+import { useState, APP_STATE } from '../composable/state';
 import { NoticeBar } from 'vant';
 import ProgressBar from './ProgressBar.vue';
 import ControlPanel from './ControlPanel.vue';
 
 const PERIOD = 40;
-
-const APP_STATE = {
-  INITIAL: 'initial',
-  RUN: 'run',
-  PAUSE: 'pause',
-  FINAL: 'final',
-};
 
 export default {
   components: {
@@ -21,7 +15,8 @@ export default {
   },
   props: ['exercises'],
   setup(props) {
-    const state = ref(APP_STATE.INITIAL);
+    //const state = ref(APP_STATE.INITIAL);
+    const { state, setState } = useState();
     const currentExercise = ref(0);
     const currentSet = ref(0);
     const isWorking = ref(true);
@@ -47,17 +42,20 @@ export default {
     });
 
     const onRestart = () => {
-      state.value = APP_STATE.INITIAL;
+      //state.value = APP_STATE.INITIAL;
+      setState(APP_STATE.INITIAL);
       currentExercise.value = 0;
       currentSet.value = 0;
       isWorking.value = true;
       currentRate.value = 0;
     };
     const onStart = () => {
-      state.value = APP_STATE.RUN;
+      //state.value = APP_STATE.RUN;
+      setState(APP_STATE.RUN);
     };
     const onPause = () => {
-      state.value = APP_STATE.PAUSE;
+      //state.value = APP_STATE.PAUSE;
+      setState(APP_STATE.PAUSE);
     };
 
     const run = () => {
@@ -69,7 +67,8 @@ export default {
           isWorking.value = true;
           if (currentSet.value + 1 === props.exercises[currentExercise.value].sets) {
             if (currentExercise.value + 1 === props.exercises.length) {
-              state.value = APP_STATE.FINAL;
+              //state.value = APP_STATE.FINAL;
+              setState(APP_STATE.FINAL);
             } else {
               currentSet.value = 0;
               currentExercise.value++;

@@ -1,5 +1,6 @@
 <script>
 import { computed } from 'vue';
+import { useState, APP_STATE } from '../composable/state';
 import { Button } from 'vant';
 
 export default {
@@ -8,10 +9,13 @@ export default {
   components: {
     Button,
   },
-  setup(props, { emit }) {
-    const isRestartDisabled = computed(() => props.state === 'initial');
-    const isStartDisabled = computed(() => props.state === 'run' || props.state === 'final');
-    const isPauseDisabled = computed(() => props.state !== 'run');
+  setup(_, { emit }) {
+    const { state } = useState();
+    const isRestartDisabled = computed(() => state.value === APP_STATE.INITIAL);
+    const isStartDisabled = computed(() => {
+      return state.value === APP_STATE.RUN || state.value === APP_STATE.FINAL;
+    });
+    const isPauseDisabled = computed(() => state.value !== APP_STATE.RUN);
 
     const onRestartClick = () => emit('restart');
     const onStartClick = () => emit('start');
