@@ -3,7 +3,6 @@ import { ref, computed, watch } from 'vue';
 import { NoticeBar } from 'vant';
 import ProgressBar from './ProgressBar.vue';
 import ControlPanel from './ControlPanel.vue';
-import settings from '../default-settings';
 
 const PERIOD = 40;
 
@@ -20,11 +19,7 @@ export default {
     ProgressBar,
     ControlPanel,
   },
-  props: {
-    exercises: {
-      default: settings.workout.exercises,
-    },
-  },
+  props: ['exercises'],
   setup(props) {
     const state = ref(APP_STATE.INITIAL);
     const currentExercise = ref(0);
@@ -136,6 +131,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
+  box-sizing: border-box;
 
   &__notice-wrap {
     padding-top: 12px;
