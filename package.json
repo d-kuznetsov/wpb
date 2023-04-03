@@ -1,6 +1,6 @@
 {
-  "name": "exercise-progress-bar",
-  "version": "0.0.0",
+  "name": "workout-progress-bar",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "vite",
